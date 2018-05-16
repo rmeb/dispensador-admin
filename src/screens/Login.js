@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import logo from '../logo.svg'
 
 export default class Login extends Component {
   submit = (e) => {
@@ -14,6 +13,7 @@ export default class Login extends Component {
         <div className="col-md-6 offset-md-3">
           <div className="text-center da-logo">
             <img src="img/logo.png" alt="logo"/>
+            <h1 className="display-5">Dispensador Admin</h1>
           </div>
           <div className="card">
             <div className="card-body">
@@ -27,7 +27,7 @@ export default class Login extends Component {
                   <input type="password" className="form-control" id="password" placeholder="Ingrese su contraseña"/>
                 </div>
                 <button type="submit" className="btn btn-primary btn-block">Ingresar</button>
-                <p className="text-right text-muted font-italic">¿No tienes cuenta? Crea una <Link to="/account">aqui</Link></p>
+                <Link className="btn btn-link btn-block" to="/account">Registrarse</Link>
               </form>
             </div>
           </div>
