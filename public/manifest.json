@@ -1,6 +1,6 @@
 {
-  "short_name": "dispensador admin",
-  "name": "dispensador admin",
+  "short_name": "Dispensador Admin",
+  "name": "Dispensador Admin",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,5 +11,5 @@
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#3F51B5"
 }

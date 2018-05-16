@@ -4,10 +4,8 @@ export default class Dashboard extends Component {
   render() {
     return (
       <div className="row">
-        <div className="card da-bg-p-dark text-light">
-          <div className="card-body">
-            Usuarios
-          </div>
+        <div className="row">
+          <h1 className="display-4">Dashboard</h1>
         </div>
       </div>
     )
