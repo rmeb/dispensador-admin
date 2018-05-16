@@ -11,11 +11,11 @@ export default class Login extends Component {
     return (
       <div className="row">
         <div className="col-md-6 offset-md-3">
-          <div className="text-center da-logo">
+          <div className="text-center">
             <img src="img/logo.png" alt="logo"/>
             <h1 className="display-5">Dispensador Admin</h1>
           </div>
-          <div className="card">
+          <div className="card bg-light">
             <div className="card-body">
               <form onSubmit={this.submit}>
                 <div className="form-group">

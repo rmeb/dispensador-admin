@@ -11,7 +11,6 @@ const Menu = [{
 
 export default class Header extends Component {
   navigate = (to) => {
-    //window.$('#toggler').click()
     window.$('#navbarNav').collapse('hide');
     if (to !== this.props.history.location.pathname) {
       this.props.history.push(to)

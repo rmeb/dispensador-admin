@@ -4,11 +4,14 @@ import {Link} from 'react-router-dom'
 export default class CreateAccount extends Component {
   render() {
     return (
-      <div className="row da-createaccount-margin">
+      <div className="row">
         <div className="col-md-6 offset-md-3">
-          <div className="card">
+          <div className="text-center">
+            <img src="img/logo.png" alt="logo"/>
+            <h1 className="display-5">Nuevo Usuario</h1>
+          </div>
+          <div className="card bg-light">
             <div className="card-body">
-              <h5 className="card-title">Nuevo usuario</h5>
               <form onSubmit={this.submit}>
                 <div className="form-group">
                   <label htmlFor="rut">Rut</label>
