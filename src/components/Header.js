@@ -2,10 +2,10 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 
 const Menu = [{
-  to: '/',
+  to: '/private/dashboard',
   label: 'Escritorio'
 }, {
-  to: '/users',
+  to: '/private/users',
   label: 'Usuarios'
 }]
 
@@ -31,7 +31,7 @@ export default class Header extends Component {
           </ul>
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" to="/settings">usuario A</Link>
+              <Link className="nav-link active" to="/private/settings">usuario A</Link>
             </li>
           </ul>
         </div>

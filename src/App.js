@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {HashRouter as Router, Route} from 'react-router-dom'
-import {Dashboard, Users, Settings} from './screens'
+import {Dashboard, Users, Settings, Login, CreateAccount} from './screens'
 import Header from './components/Header'
 
 import './App.css';
@@ -10,11 +10,13 @@ class App extends Component {
     return (
       <Router>
         <div className="container">
-          <Header />
+          <Route exact path="/" component={Login}/>
+          <Route exact path="/account" component={CreateAccount}/>
+          <Route path="/private" component={Header}/>
           <div className="da-body-margin">
-            <Route exact path="/" component={Dashboard}/>
-            <Route path="/users" component={Users}/>
-            <Route path="/settings" component={Settings}/>
+            <Route path="/private/dashboard" component={Dashboard}/>
+            <Route path="/private/users" component={Users}/>
+            <Route path="/private/settings" component={Settings}/>
           </div>
         </div>
       </Router>
