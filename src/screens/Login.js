@@ -13,7 +13,7 @@ export default class Login extends Component {
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <div className="text-center da-logo">
-            <img src={logo} width={300} height={300} alt="logo"/>
+            <img src="img/logo.png" alt="logo"/>
           </div>
           <div className="card">
             <div className="card-body">
