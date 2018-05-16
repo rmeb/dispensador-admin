@@ -3,27 +3,31 @@
 }
 
 .da-bg-primary {
-  background-color: #1976d2;
+  background-color: #5c6bc0;
 }
 
 .da-bg-p-light {
-  background-color: #63a4ff;
+  background-color: #8e99f3;
 }
 
 .da-bg-p-dark {
-  background-color: #004ba0;
+  background-color: #26418f;
 }
 
 .da-bg-secondary {
-  background-color: #3f51b5;
+  background-color: #1565c0;
 }
 
-.da-bg-p-light {
-  background-color: #757de8;
+.da-bg-s-light {
+  background-color: #5e92f3;
 }
 
-.da-bg-p-dark {
-  background-color: #002984;
+.da-bg-s-dark {
+  background-color: #003c8f;
+}
+
+.da-error {
+  background-color: #B00020;
 }
 
 .da-logo {
