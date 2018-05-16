@@ -1,0 +1,16 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5vh;
+}
+
+.Main {
+  width: 100vw;
+}
+
+@media (min-width: 1280px) {
+  .Main {
+    width: 50vw;
+  }
+}

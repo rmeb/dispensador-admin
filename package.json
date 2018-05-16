@@ -1,0 +1,29 @@
+{
+  "name": "dispensador-admin",
+  "version": "0.1.0",
+  "description": "dApp de Administración de dispensadores",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmeb/dispensador-admin.git"
+  },
+  "author": "Andres Junge <andres.junge@consensys.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rmeb/dispensador-admin/issues"
+  },
+  "homepage": "https://github.com/rmeb/dispensador-admin#readme",
+  "dependencies": {
+    "rmeb-contracts": "0.1.0",
+    "numeral": "^2.0.6",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-scripts": "1.1.1",
+    "web3": "^1.0.0-beta.33"
+  }
+}
