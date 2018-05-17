@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import {test} from '../lib/Lightwallet'
 
 export default class CreateAccount extends Component {
+  componentDidMount() {
+    test('clave')
+  }
+  
   render() {
     return (
       <div className="row">
