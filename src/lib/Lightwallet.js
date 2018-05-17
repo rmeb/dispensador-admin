@@ -1,12 +1,38 @@
 import {keystore} from 'eth-lightwallet'
 
+export function createKeystore(password) {
+  let seedPhrase = keystore.generateRandomSeed()
+  return new Promise((resolve, reject) => {
+    keystore.createVault({
+      password: password,
+      seedPhrase: seedPhrase,
+      hdPathString: "m/0'/0'/0'"
+    }, function (err, ks) {
+      if (err) return reject(err)
+      ks.keyFromPassword(password, function (err, pwDerivedKey) {
+        if (err) return reject(err);
+        ks.generateNewAddress(pwDerivedKey, 1);
+        resolve({
+          seedPhrase,
+          addresses: ks.getAddresses(),
+          keystore: ks.serialize()
+        })
+      });
+    });
+  })
+}
+
+export function restoreKeystore(serializedKeystore) {
+  return keystore.deserialize(serializedKeystore)
+}
+
 export function test(password) {
   let seedPhrase = keystore.generateRandomSeed()
   console.log('seed', seedPhrase)
   keystore.createVault({
     password: password,
     seedPhrase: seedPhrase,
-   hdPathString: "m/0'/0'/0'"
+    hdPathString: "m/0'/0'/0'"
   }, function (err, ks) {
     if (err) throw err
     // Some methods will require providing the `pwDerivedKey`,
