@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import Error from '../components/Error'
 import {get_keystore} from '../lib/Api'
 
 export default class Login extends Component {
   state = {
     rut: '',
-    password: ''
+    password: '',
+    error: '',
+    loading: false
   }
 
   submit = (e) => {
@@ -20,8 +23,15 @@ export default class Login extends Component {
     let data = {
       rut, password
     }
-    get_keystore(data).then(console.log).catch(console.error)
-    //this.props.history.push('/private/dashboard')
+    this.setState({loading: true})
+    get_keystore(data).then(keys => {
+      console.log(keys)
+      this.props.history.push('/private/dashboard')
+    }).catch(this.onError)
+  }
+
+  onError = (e) => {
+    this.setState({error: e.message ? e.message : e, loading: false})
   }
 
   onChange = (e) => {
@@ -49,6 +59,7 @@ export default class Login extends Component {
                   <input type="password" className="form-control" id="password" placeholder="Ingrese su contraseña"
                     value={this.state.password} onChange={this.onChange}/>
                 </div>
+                <Error message={this.state.error} onClick={() => this.setState({error: ''})}/>
                 <button type="submit" className="btn btn-primary btn-block">Ingresar</button>
                 <Link className="btn btn-link btn-block" to="/account">Registrarse</Link>
               </form>

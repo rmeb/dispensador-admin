@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import Error from '../components/Error'
 import {createKeystore, restoreKeystore} from '../lib/Lightwallet'
 import {create_keystore} from  '../lib/Api'
 
@@ -7,7 +8,12 @@ export default class CreateAccount extends Component {
   state = {
     rut: '',
     password: '',
-    repassword: ''
+    repassword: '',
+    error: '',
+    error_rut: '',
+    error_password: '',
+    error_repassword: '',
+    loading: false
   }
 
   submit = (e) => {
@@ -23,24 +29,43 @@ export default class CreateAccount extends Component {
       return
     }
 
+    this.setState({error: '', loading: true})
     createKeystore(password).then(keys => {
       console.log(keys)
-      console.log(restoreKeystore(keys.keystore).getAddresses())
+      //console.log(restoreKeystore(keys.keystore).getAddresses())
       //TODO guardar rut, password, serialized keystore
       let data = {
         rut, password,
         addresses: keys.addresses,
         keystore: keys.keystore
       }
-      create_keystore(data).then(console.log).catch(console.error)
+      create_keystore(data).then(() => {
+        this.props.history.goBack()
+      }).catch(this.onError)
     })
   }
 
+  onError = (e) => {
+    this.setState({error: e.message ? e.message : e, loading: false})
+  }
+
   onChange = (e) => {
-    this.setState({[e.target.id]: e.target.value})
+    let id = e.target.id
+    let value = e.target.value
+    let equals = e.target.dataset.equals
+    let err = ''
+
+    if (value.trim().length === 0) {
+      err = 'El campo es requerido'
+    } else if (equals && value !== this.state[equals]) {
+      err = 'Las contraseñas deben ser iguales'
+    }
+
+    this.setState({[e.target.id]: e.target.value, ['error_' + id]: err})
   }
 
   render() {
+    let {rut, password, repassword, error_rut, error_password, error_repassword} = this.state
     return (
       <div className="row">
         <div className="col-md-6 offset-md-3">
@@ -53,19 +78,24 @@ export default class CreateAccount extends Component {
               <form onSubmit={this.submit}>
                 <div className="form-group">
                   <label htmlFor="rut">Rut</label>
-                  <input className="form-control" id="rut" aria-describedby="emailHelp" placeholder="Ingrese el rut"
-                    value={this.state.rut} onChange={this.onChange} required/>
+                  <input className={this.inputValid(error_rut)} id="rut" placeholder="Ingrese el rut"
+                    value={rut} onChange={this.onChange} />
+                  <div className="invalid-feedback">{error_rut}</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Contraseña</label>
-                  <input type="password" className="form-control" id="password" placeholder="Ingrese su contraseña"
-                    value={this.state.password} onChange={this.onChange} required/>
+                  <input type="password" className={this.inputValid(error_password)} id="password" placeholder="Ingrese su contraseña"
+                    value={password} onChange={this.onChange} />
+                  <div className="invalid-feedback">{error_password}</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="repassword">Reingrese Contraseña</label>
-                  <input type="passrepasswordword" className="form-control" id="repassword" placeholder="Ingrese nuevamente su contraseña"
-                    value={this.state.repassword} onChange={this.onChange} required/>
+                  <input type="password" className={this.inputValid(error_repassword)} id="repassword" placeholder="Ingrese nuevamente su contraseña"
+                    value={repassword} onChange={this.onChange} data-equals="password" />
+                  <div className="invalid-feedback">{error_repassword}
+                  </div>
                 </div>
+                <Error message={this.state.error} onClick={() => this.setState({error: ''})}/>
                 <button type="submit" className="btn btn-success btn-block">Ingresar</button>
                 <Link className="btn btn-link btn-block" to="/">Volver</Link>
               </form>
@@ -74,5 +104,9 @@ export default class CreateAccount extends Component {
         </div>
       </div>
     )
+  }
+
+  inputValid = (err) => {
+    return 'form-control' + (err.length !== 0 ? ' is-invalid' : '')
   }
 }
