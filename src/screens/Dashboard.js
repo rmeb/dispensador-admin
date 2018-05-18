@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import Loading from '../components/Loading'
 
 export default class Dashboard extends Component {
+  state = {
+    loading: false
+  }
+
   render() {
+    if (this.state.loading) return <Loading />
     return (
       <div className="row">
-        {/*<div className="card da-bg-p-light">
-          <div className="card-body">*/}
-            <h1 className="display-4">Dashboard</h1>
-          {/*</div>
-        </div>*/}
+        <h1 className="display-4">Dashboard</h1>
       </div>
     )
   }
