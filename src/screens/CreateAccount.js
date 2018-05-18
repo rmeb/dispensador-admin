@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import Error from '../components/Error'
-import {createKeystore, restoreKeystore} from '../lib/Lightwallet'
-import {create_keystore} from  '../lib/Api'
+import {create_keys} from '../lib/Lightwallet'
+import {save_keystore} from  '../lib/Api'
 import {validate_rut} from '../lib/Validation'
 
 export default class CreateAccount extends Component {
@@ -31,16 +31,13 @@ export default class CreateAccount extends Component {
     }
 
     this.setState({error: '', loading: true})
-    createKeystore(password).then(keys => {
-      console.log(keys)
-      //console.log(restoreKeystore(keys.keystore).getAddresses())
-      //TODO guardar rut, password, serialized keystore
+    create_keys(password).then(keys => {
       let data = {
         rut, password,
         addresses: keys.addresses,
         keystore: keys.keystore
       }
-      create_keystore(data).then(() => {
+      save_keystore(data).then(() => {
         this.props.history.goBack()
       }).catch(this.onError)
     })
@@ -66,7 +63,6 @@ export default class CreateAccount extends Component {
       err = 'El rut no es valido'
     }
 
-
     this.setState({[e.target.id]: e.target.value, ['error_' + id]: err})
   }
 
@@ -84,19 +80,19 @@ export default class CreateAccount extends Component {
               <form onSubmit={this.submit}>
                 <div className="form-group">
                   <label htmlFor="rut">Rut</label>
-                  <input className={this.inputValid(error_rut)} id="rut" placeholder="Ingrese el rut"
+                  <input className={inputValid(error_rut)} id="rut" placeholder="Ingrese el rut"
                     value={rut} onChange={this.onChange} />
                   <div className="invalid-feedback">{error_rut}.</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Contraseña</label>
-                  <input type="password" className={this.inputValid(error_password)} id="password" placeholder="Ingrese su contraseña"
+                  <input type="password" className={inputValid(error_password)} id="password" placeholder="Ingrese su contraseña"
                     value={password} onChange={this.onChange} />
                   <div className="invalid-feedback">{error_password}.</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="repassword">Reingrese Contraseña</label>
-                  <input type="password" className={this.inputValid(error_repassword)} id="repassword" placeholder="Ingrese nuevamente su contraseña"
+                  <input type="password" className={inputValid(error_repassword)} id="repassword" placeholder="Ingrese nuevamente su contraseña"
                     value={repassword} onChange={this.onChange} data-equals="password" />
                   <div className="invalid-feedback">{error_repassword}.</div>
                 </div>
@@ -110,8 +106,8 @@ export default class CreateAccount extends Component {
       </div>
     )
   }
+}
 
-  inputValid = (err) => {
-    return 'form-control' + (err.length !== 0 ? ' is-invalid' : '')
-  }
+function inputValid(err) {
+  return 'form-control' + (err.length !== 0 ? ' is-invalid' : '')
 }

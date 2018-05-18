@@ -1,7 +1,7 @@
 const APIURL = 'http://localhost:4000'
 
-export function create_keystore(data) {
-  return send('/keystore/create', data)
+export function save_keystore(data) {
+  return send('/keystore/save', data)
 }
 
 export function get_keystore(data) {

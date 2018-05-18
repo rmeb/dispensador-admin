@@ -1,6 +1,6 @@
 import {keystore} from 'eth-lightwallet'
 
-export function createKeystore(password) {
+export function create_keys(password) {
   let seedPhrase = keystore.generateRandomSeed()
   return new Promise((resolve, reject) => {
     keystore.createVault({
@@ -22,10 +22,10 @@ export function createKeystore(password) {
   })
 }
 
-export function restoreKeystore(serializedKeystore) {
+export function restore_keystore(serializedKeystore) {
   return keystore.deserialize(serializedKeystore)
 }
-
+/*
 export function test(password) {
   let seedPhrase = keystore.generateRandomSeed()
   console.log('seed', seedPhrase)
@@ -58,3 +58,4 @@ export function test(password) {
     });
   });
 }
+*/

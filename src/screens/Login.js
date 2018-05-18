@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import Error from '../components/Error'
 import {get_keystore} from '../lib/Api'
 import {validate_rut} from '../lib/Validation'
+import session from '../lib/Session'
 
 export default class Login extends Component {
   state = {
@@ -12,6 +13,12 @@ export default class Login extends Component {
     error_rut: '',
     error_password: '',
     loading: false
+  }
+
+  componentDidMount() {
+    if (session.valid()) {
+      this.props.history.push('/private/dashboard')
+    }
   }
 
   submit = (e) => {
@@ -29,6 +36,7 @@ export default class Login extends Component {
     this.setState({loading: true})
     get_keystore(data).then(keys => {
       console.log(keys)
+      session.new_session(keys)
       this.props.history.push('/private/dashboard')
     }).catch(this.onError)
   }
@@ -66,13 +74,13 @@ export default class Login extends Component {
               <form onSubmit={this.submit}>
                 <div className="form-group">
                   <label htmlFor="rut">Rut</label>
-                  <input className={this.inputValid(error_rut)} placeholder="Ingrese el rut"
+                  <input className={inputValid(error_rut)} placeholder="Ingrese el rut"
                     id="rut" value={rut} onChange={this.onChange}/>
                   <div className="invalid-feedback">{error_rut}.</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Contraseña</label>
-                  <input type="password" className={this.inputValid(error_password)} placeholder="Ingrese su contraseña"
+                  <input type="password" className={inputValid(error_password)} placeholder="Ingrese su contraseña"
                     id="password" value={password} onChange={this.onChange}/>
                   <div className="invalid-feedback">{error_password}.</div>
                 </div>
@@ -86,8 +94,8 @@ export default class Login extends Component {
       </div>
     )
   }
+}
 
-  inputValid = (err) => {
-    return 'form-control' + (err.length !== 0 ? ' is-invalid' : '')
-  }
+function inputValid(err) {
+  return 'form-control' + (err.length !== 0 ? ' is-invalid' : '')
 }

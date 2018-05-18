@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import session from '../lib/Session'
 
 const Menu = [{
   to: '/private/dashboard',
@@ -21,8 +22,9 @@ export default class Header extends Component {
     let path = this.props.history.location.pathname
     return (
       <nav className="navbar fixed-top navbar-expand-lg navbar-dark da-bg-primary">
-        <Link className="navbar-brand" to="/">Dispensador</Link>
-        <button id="toggler" className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <div className="navbar-brand">Dispensador</div>
+        <button id="toggler" className="navbar-toggler" type="button" data-toggle="collapse"
+          data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
@@ -35,8 +37,16 @@ export default class Header extends Component {
           </ul>
           <div className="dropdown-divider"></div>
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <a className="nav-link active" onClick={e => this.navigate("/private/settings")}>Nombre del Usuario</a>
+            <li className="nav-item dropdown active">
+              <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i className="fas fa-user-circle fa-lg"></i> Usuario
+              </a>
+              <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a className="dropdown-item" onClick={e => this.navigate("/private/settings")}><i className="fas fa-cog"></i> Configuracion</a>
+                <div className="dropdown-divider"></div>
+                <Link className="dropdown-item" to="/" onClick={e => session.logout()}><i className="fas fa-sign-out-alt"></i> Salir</Link>
+              </div>
             </li>
           </ul>
         </div>
