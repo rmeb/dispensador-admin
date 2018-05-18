@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import Error from '../components/Error'
 import {createKeystore, restoreKeystore} from '../lib/Lightwallet'
 import {create_keystore} from  '../lib/Api'
+import {validate_rut} from '../lib/Validation'
 
 export default class CreateAccount extends Component {
   state = {
@@ -57,9 +58,14 @@ export default class CreateAccount extends Component {
 
     if (value.trim().length === 0) {
       err = 'El campo es requerido'
-    } else if (equals && value !== this.state[equals]) {
+    }
+    if (equals && value !== this.state[equals]) {
       err = 'Las contraseñas deben ser iguales'
     }
+    if (id === 'rut' && !validate_rut(value)) {
+      err = 'El rut no es valido'
+    }
+
 
     this.setState({[e.target.id]: e.target.value, ['error_' + id]: err})
   }
@@ -80,20 +86,19 @@ export default class CreateAccount extends Component {
                   <label htmlFor="rut">Rut</label>
                   <input className={this.inputValid(error_rut)} id="rut" placeholder="Ingrese el rut"
                     value={rut} onChange={this.onChange} />
-                  <div className="invalid-feedback">{error_rut}</div>
+                  <div className="invalid-feedback">{error_rut}.</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Contraseña</label>
                   <input type="password" className={this.inputValid(error_password)} id="password" placeholder="Ingrese su contraseña"
                     value={password} onChange={this.onChange} />
-                  <div className="invalid-feedback">{error_password}</div>
+                  <div className="invalid-feedback">{error_password}.</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="repassword">Reingrese Contraseña</label>
                   <input type="password" className={this.inputValid(error_repassword)} id="repassword" placeholder="Ingrese nuevamente su contraseña"
                     value={repassword} onChange={this.onChange} data-equals="password" />
-                  <div className="invalid-feedback">{error_repassword}
-                  </div>
+                  <div className="invalid-feedback">{error_repassword}.</div>
                 </div>
                 <Error message={this.state.error} onClick={() => this.setState({error: ''})}/>
                 <button type="submit" className="btn btn-success btn-block">Ingresar</button>

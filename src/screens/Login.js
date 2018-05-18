@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import Error from '../components/Error'
 import {get_keystore} from '../lib/Api'
+import {validate_rut} from '../lib/Validation'
 
 export default class Login extends Component {
   state = {
     rut: '',
     password: '',
     error: '',
+    error_rut: '',
+    error_password: '',
     loading: false
   }
 
@@ -35,10 +38,22 @@ export default class Login extends Component {
   }
 
   onChange = (e) => {
-    this.setState({[e.target.id]: e.target.value})
+    let id = e.target.id
+    let value = e.target.value
+    let err = ''
+
+    if (value.trim().length === 0) {
+      err = 'El campo es requerido'
+    }
+    if (id === 'rut' && !validate_rut(value)) {
+      err = 'El rut no es valido'
+    }
+
+    this.setState({[e.target.id]: e.target.value, ['error_' + id]: err})
   }
 
   render() {
+    let {rut, password, error_rut, error_password} = this.state
     return (
       <div className="row">
         <div className="col-md-6 offset-md-3">
@@ -51,13 +66,15 @@ export default class Login extends Component {
               <form onSubmit={this.submit}>
                 <div className="form-group">
                   <label htmlFor="rut">Rut</label>
-                  <input className="form-control" id="rut" aria-describedby="emailHelp" placeholder="Ingrese el rut"
-                    value={this.state.rut} onChange={this.onChange}/>
+                  <input className={this.inputValid(error_rut)} placeholder="Ingrese el rut"
+                    id="rut" value={rut} onChange={this.onChange}/>
+                  <div className="invalid-feedback">{error_rut}.</div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Contraseña</label>
-                  <input type="password" className="form-control" id="password" placeholder="Ingrese su contraseña"
-                    value={this.state.password} onChange={this.onChange}/>
+                  <input type="password" className={this.inputValid(error_password)} placeholder="Ingrese su contraseña"
+                    id="password" value={password} onChange={this.onChange}/>
+                  <div className="invalid-feedback">{error_password}.</div>
                 </div>
                 <Error message={this.state.error} onClick={() => this.setState({error: ''})}/>
                 <button type="submit" className="btn btn-primary btn-block">Ingresar</button>
@@ -68,5 +85,9 @@ export default class Login extends Component {
         </div>
       </div>
     )
+  }
+
+  inputValid = (err) => {
+    return 'form-control' + (err.length !== 0 ? ' is-invalid' : '')
   }
 }
