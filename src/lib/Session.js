@@ -1,6 +1,9 @@
 const storage = window.localStorage
 const KEY = 'dispensador-admin-session'
 
+/**
+* Maneja el localStorage para almacenar la sesion del usuario
+**/
 class Session {
   constructor() {
     this.keystore = storage.getItem(KEY)

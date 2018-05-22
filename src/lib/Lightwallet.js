@@ -1,5 +1,10 @@
 import {keystore} from 'eth-lightwallet'
 
+/**
+* Genera una 12-word seed de manera aleatorea y la usa, junto a la contraserña
+* para crear un keystore, luego genera una nueva direccion ethereum y retorna
+* la 12-word seed junto con la direccion y el keystore serializado.
+**/
 export function create_keys(password) {
   let seedPhrase = keystore.generateRandomSeed()
   return new Promise((resolve, reject) => {
@@ -22,6 +27,9 @@ export function create_keys(password) {
   })
 }
 
+/**
+* Deserializa el keystore para utilizarlo.
+**/
 export function restore_keystore(serializedKeystore) {
   return keystore.deserialize(serializedKeystore)
 }
