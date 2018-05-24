@@ -1,16 +1,16 @@
 const APIURL = 'http://localhost:4000'
 
 export function save_keystore(data) {
-  return send('/keystore/save', data)
+  return send('/keystore/ident', 'POST', data)
 }
 
 export function get_keystore(data) {
-  return send('/keystore/get', data)
+  return send('/keystore/ident', 'GET')
 }
 
-function send(path, body) {
+function send(path, method, body) {
   return fetch(APIURL + path, {
-    method: 'POST',
+    method,
     headers: {
       'Content-Type': 'application/json'
     },

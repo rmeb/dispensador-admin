@@ -17,7 +17,7 @@ export default class Login extends Component {
 
   componentDidMount() {
     if (session.valid()) {
-      this.props.history.push('/private/dashboard')
+      this.props.history.push('/private/users')
     }
   }
 
@@ -37,7 +37,7 @@ export default class Login extends Component {
     get_keystore(data).then(keys => {
       console.log(keys)
       session.new_session(keys)
-      this.props.history.push('/private/dashboard')
+      this.props.history.push('/private/users')
     }).catch(this.onError)
   }
 

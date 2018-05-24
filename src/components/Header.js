@@ -3,9 +3,6 @@ import {Link} from 'react-router-dom'
 import session from '../lib/Session'
 
 const Menu = [{
-  to: '/private/dashboard',
-  label: 'Escritorio'
-}, {
   to: '/private/users',
   label: 'Usuarios'
 }]
