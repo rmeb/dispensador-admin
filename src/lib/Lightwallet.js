@@ -20,7 +20,7 @@ export function create_keys(password) {
         resolve({
           seedPhrase,
           addresses: ks.getAddresses(),
-          keystore: ks.serialize()
+          keystore: ks
         })
       });
     });

@@ -4,6 +4,8 @@ import Error from '../components/Error'
 import {create_keys} from '../lib/Lightwallet'
 import {save_keystore} from  '../lib/Api'
 import {validate_rut} from '../lib/Validation'
+import {initWeb3} from '../lib/Eth'
+
 
 export default class CreateAccount extends Component {
   state = {
@@ -32,10 +34,11 @@ export default class CreateAccount extends Component {
 
     this.setState({error: '', loading: true})
     create_keys(password).then(keys => {
+      initWeb3(keys.keystore);
       let data = {
         rut, password,
         addresses: keys.addresses,
-        keystore: keys.keystore
+        keystore: keys.keystore.serialize()
       }
       save_keystore(data).then(() => {
         this.props.history.goBack()
