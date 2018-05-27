@@ -1,10 +1,12 @@
+import {restore_keystore} from './Lightwallet'
 const SignerProvider = require('ethjs-provider-signer');
 const Eth = require('ethjs-query');
 
 let web3;
 
 export function initWeb3(keystore){
-    const provider = new SignerProvider('https://rinkeby.infura.io', keystore);
+  console.log(keystore)
+    const provider = new SignerProvider('https://rinkeby.infura.io', restore_keystore(keystore));
     const eth = new Eth(provider);
     web3={ eth:eth };
 }
@@ -21,4 +23,3 @@ export function accounts() {
 export function getWeiBalance(address) {
     return web3.eth.getBalance(address)
 }
-

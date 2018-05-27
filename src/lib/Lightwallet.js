@@ -1,6 +1,6 @@
 import {keystore} from 'eth-lightwallet'
 
-/**
+/**        addresses: keys.addresses,
 * Genera una 12-word seed de manera aleatorea y la usa, junto a la contraserña
 * para crear un keystore, luego genera una nueva direccion ethereum y retorna
 * la 12-word seed junto con la direccion y el keystore serializado.
@@ -19,7 +19,6 @@ export function create_keys(password) {
         ks.generateNewAddress(pwDerivedKey, 1);
         resolve({
           seedPhrase,
-          addresses: ks.getAddresses(),
           keystore: ks
         })
       });

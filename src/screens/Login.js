@@ -23,7 +23,7 @@ export default class Login extends Component {
 
   submit = (e) => {
     e.preventDefault()
-    /*let rut = this.state.rut.trim()
+    let rut = this.state.rut.trim()
     let password = this.state.password.trim()
 
     if (rut.length === 0 || password.length === 0) {
@@ -31,17 +31,16 @@ export default class Login extends Component {
     }
 
     let data = {
-      rut, password
+      password
     }
     this.setState({loading: true})
-    get_keystore(data).then(keys => {
-      console.log(keys)
+    get_keystore(rut, data).then(keys => {
       session.new_session(keys)
       this.props.history.push('/private/users')
-    }).catch(this.onError)*/
+    }).catch(this.onError)
     //FIXME TEMPORAL
-    session.new_session('keys')
-    this.props.history.push('/private/users')
+    /*session.new_session('keys')
+    this.props.history.push('/private/users')*/
   }
 
   onError = (e) => {

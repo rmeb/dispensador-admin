@@ -1,11 +1,11 @@
 const APIURL = 'http://localhost:4000'
 
-export function save_keystore(data) {
-  return send('/keystore/ident', 'POST', data)
+export function save_keystore(rut, body) {
+  return send('/keystore/' + rut, 'POST', body)
 }
 
-export function get_keystore(data) {
-  return send('/keystore/ident', 'GET')
+export function get_keystore(rut, body) {
+  return send('/keystore/' + rut, 'GET', body)
 }
 
 function send(path, method, body) {
@@ -28,4 +28,31 @@ function response(response) {
 
 function success(response) {
   return response.status === 'success' ? response.data : Promise.reject(response.data)
+}
+
+function fetch(path, data) {
+  console.log(path, data)
+  return new Promise((resolve, reject) => {
+    if (data.method === "POST")  {
+      window.localStorage.setItem('rx-db-tmp', data.body)
+      resolve({
+        status: 200,
+        json: () => ({
+          status: 'success',
+          data: 'created'
+        })
+      })
+    } else {
+      resolve({
+        status: 200,
+        json: function() {
+          let obj = JSON.parse(window.localStorage.getItem('rx-db-tmp'))
+          return {
+            status: 'success',
+            data: obj.keystore
+          }
+        }
+      })
+    }
+  })
 }

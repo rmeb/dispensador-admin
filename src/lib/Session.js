@@ -1,3 +1,5 @@
+import {initWeb3} from '../lib/Eth'
+
 const storage = window.localStorage
 const KEY = 'dispensador-admin-session'
 
@@ -6,12 +8,16 @@ const KEY = 'dispensador-admin-session'
 **/
 class Session {
   constructor() {
-    this.keystore = storage.getItem(KEY)
+    let keystore = storage.getItem(KEY)
+    this.new_session(keystore)
   }
 
   new_session(keystore) {
     this.keystore = keystore
-    storage.setItem(KEY, JSON.stringify(keystore))
+    if (keystore !== null) {
+      storage.setItem(KEY, keystore)
+      initWeb3(keystore)
+    }
   }
 
   logout() {
