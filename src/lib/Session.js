@@ -16,6 +16,7 @@ class Session {
     this.keystore = keystore
     if (keystore !== null) {
       storage.setItem(KEY, keystore)
+      console.log(keystore)
       initWeb3(keystore)
     }
   }

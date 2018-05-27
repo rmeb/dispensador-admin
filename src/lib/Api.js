@@ -30,6 +30,8 @@ function success(response) {
   return response.status === 'success' ? response.data : Promise.reject(response.data)
 }
 
+
+//FIXME comentar dummy fetch
 function fetch(path, data) {
   console.log(path, data)
   return new Promise((resolve, reject) => {

@@ -3,11 +3,12 @@ import {accounts, getWeiBalance} from '../lib/Eth'
 
 export default class Settings extends Component {
   state = {
-    
+
   }
 
   componentDidMount() {
     accounts().then(console.log).catch(console.error)
+    //console.log('accounts', accounts())
   }
 
   render() {

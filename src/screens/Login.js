@@ -38,9 +38,6 @@ export default class Login extends Component {
       session.new_session(keys)
       this.props.history.push('/private/users')
     }).catch(this.onError)
-    //FIXME TEMPORAL
-    /*session.new_session('keys')
-    this.props.history.push('/private/users')*/
   }
 
   onError = (e) => {
