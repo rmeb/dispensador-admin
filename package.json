@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "dApp de Administración de dispensadores",
   "dependencies": {
+    "bn.js": "^4.11.8",
     "eth-lightwallet": "^3.0.1",
     "ethjs-provider-signer": "^0.1.4",
     "ethjs-query": "^0.3.8",

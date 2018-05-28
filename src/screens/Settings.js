@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {get_accounts, getWeiBalance, from_wei, get_seed_words} from '../lib/Eth'
+import BN from 'bn.js'
+import {get_accounts, getWeiBalance, from_wei, get_seed_words, sendTransaction,
+  get_derived_key} from '../lib/Eth'
 
 export default class Settings extends Component {
   state = {
@@ -13,7 +15,7 @@ export default class Settings extends Component {
     let accounts = get_accounts()
     if (accounts.length > 0) {
       getWeiBalance('0x' + accounts[0]).then(r => {
-        this.setState({balance: parseInt(from_wei(r.toString()), 10)})
+        this.setState({balance: r.toString()})
       }).catch(console.error)
     }
     this.setState({accounts})
@@ -23,6 +25,22 @@ export default class Settings extends Component {
     e.preventDefault()
     get_seed_words(this.state.password).then(words => this.setState({words})).catch(console.error)
     window.$('#wordsModal').modal('toggle')
+  }
+
+  sendEth = (e) => {
+    console.log(this.state.balance)
+    let balance = new BN(this.state.balance)
+    let FEE = new BN('100000000000000')
+    let value = balance.sub(FEE)
+    let tx = {
+      from: '0x' + this.state.accounts[0],
+      to: '0x1f37eebA99aB6e7DCF98DDFA3aBDa96Fa3372a46',
+      value,
+      gas: 30000,
+      data: '0x'
+    }
+    console.log(tx)
+    sendTransaction('asdf', tx).then(console.log).catch(console.error)
   }
 
   onChange = (e) => {
@@ -37,7 +55,8 @@ export default class Settings extends Component {
             <div className="col-md-3">
               <div className="card">
                 <div className="card-body text-center">
-                  <h1 className="display-5">{this.state.balance} eth</h1>
+                  <h1 className="display-5">{from_wei(this.state.balance)}</h1>
+                  <p>eth</p>
                 </div>
               </div>
             </div>
@@ -57,6 +76,7 @@ export default class Settings extends Component {
               <div className="card bg-light">
                 <div className="card-body">
                   <button className="btn btn-danger" data-toggle="modal" data-target="#wordsModal">Mostrar Seed Words</button>
+                  {/*<button className="btn btn-danger" onClick={this.sendEth}>Recuperar</button>*/}
                   {this.state.words.length === 0 ? null :
                     <div className="card mt-3">
                       <div className="card-body">
