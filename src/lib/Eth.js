@@ -23,8 +23,12 @@ export function get_accounts() {
 }
 
 export function get_seed_words(password) {
-  let pwDerivedKey = ks.keyFromPassword(password)
-  return ks.getSeed(pwDerivedKey)
+  return new Promise((resolve, reject) => {
+    ks.keyFromPassword(password, (e, pwDerivedKey) => {
+      if (e) return reject(e)
+      resolve(ks.getSeed(pwDerivedKey).toString())
+    })
+  })
 }
 
 export function getWeiBalance(address) {
