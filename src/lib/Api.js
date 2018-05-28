@@ -1,21 +1,29 @@
 const APIURL = 'http://localhost:4000'
 
 export function save_keystore(rut, body) {
-  return send('/keystore/' + rut, 'POST', body)
-}
-
-export function get_keystore(rut, body) {
-  return send('/keystore/' + rut, 'GET', body)
-}
-
-function send(path, method, body) {
-  return fetch(APIURL + path, {
-    method,
+  //return send('/keystore/' + rut, 'POST', body)
+  return send('/keystore/' + rut, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: body ? JSON.stringify(body) : "{}"
-  }).then(response).then(success)
+    body: JSON.stringify(body)
+  })
+}
+
+export function get_keystore(rut, token) {
+  //return send('/keystore/' + rut, 'GET', {}, token)
+  console.log(token)
+  return send('/keystore/' + rut, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  })
+}
+
+function send(path, options) {
+  return fetch(APIURL + path, options).then(response).then(success)
 }
 
 function response(response) {
@@ -30,7 +38,7 @@ function success(response) {
   return response.status === 'success' ? response.data : Promise.reject(response.data)
 }
 
-
+/*
 //FIXME comentar dummy fetch
 function fetch(path, data) {
   console.log(path, data)
@@ -58,3 +66,4 @@ function fetch(path, data) {
     }
   })
 }
+*/

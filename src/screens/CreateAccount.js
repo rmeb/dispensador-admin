@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import {sha3_256} from 'js-sha3'
 import Error from '../components/Error'
 import {create_keys} from '../lib/Lightwallet'
 import {save_keystore} from  '../lib/Api'
@@ -34,7 +35,7 @@ export default class CreateAccount extends Component {
     this.setState({error: '', loading: true})
     create_keys(password).then(keys => {
       let data = {
-        password,
+        token: sha3_256(password),
         keystore: keys.keystore.serialize()
       }
       this.setState({showSeeWords: true})

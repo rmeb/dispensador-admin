@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
+import {sha3_256} from 'js-sha3'
 import Error from '../components/Error'
 import {get_keystore} from '../lib/Api'
 import {validate_rut} from '../lib/Validation'
@@ -30,11 +31,8 @@ export default class Login extends Component {
       return
     }
 
-    let data = {
-      password
-    }
     this.setState({loading: true})
-    get_keystore(rut, data).then(keys => {
+    get_keystore(rut, sha3_256(password)).then(keys => {
       session.new_session(keys)
       this.props.history.push('/private/users')
     }).catch(this.onError)
