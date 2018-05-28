@@ -7,7 +7,7 @@ export default class Settings extends Component {
   }
 
   componentDidMount() {
-    accounts().then(console.log).catch(console.error)
+    console.log(accounts())
     //console.log('accounts', accounts())
   }
 

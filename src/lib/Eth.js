@@ -3,20 +3,17 @@ const SignerProvider = require('ethjs-provider-signer');
 const Eth = require('ethjs-query');
 
 let web3;
+let ks;
 
 export function initWeb3(keystore){
-    let ks = restore_keystore(keystore)
-    console.log(ks)
+    ks = restore_keystore(keystore)
     const provider = new SignerProvider('https://rinkeby.infura.io', ks);
     const eth = new Eth(provider);
-    eth.getAccounts = () => new Promise(r => {
-      r(ks.addresses)
-    })
     web3={ eth:eth };
 }
 
 export function accounts() {
-    return web3.eth.getAccounts()
+    return ks.addresses
     /*return web3.eth.accounts((e, r) => {
       if (e) {
         return console.log(e)
