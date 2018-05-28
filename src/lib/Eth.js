@@ -12,7 +12,7 @@ export function initWeb3(keystore){
     web3={ eth:eth };
 }
 
-export function accounts() {
+export function get_accounts() {
     return ks.addresses
     /*return web3.eth.accounts((e, r) => {
       if (e) {
@@ -22,6 +22,15 @@ export function accounts() {
     })*/
 }
 
+export function get_seed_words(password) {
+  let pwDerivedKey = ks.keyFromPassword(password)
+  return ks.getSeed(pwDerivedKey)
+}
+
 export function getWeiBalance(address) {
     return web3.eth.getBalance(address)
+}
+
+export function from_wei(wei) {
+  return Math.floor(wei / 1000000000000000000)
 }
