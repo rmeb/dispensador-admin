@@ -27,7 +27,6 @@
   "bugs": {
     "url": "https://github.com/rmeb/dispensador-admin/issues"
   },
-  "homepage": "https://github.com/rmeb/dispensador-admin#readme",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
