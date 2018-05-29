@@ -1,5 +1,5 @@
-//const APIURL = 'http://localhost:4000'
-const APIURL = 'https://rx-keyserver.herokuapp.com'
+const APIURL = 'http://localhost:4000'
+//const APIURL = 'https://rx-keyserver.herokuapp.com'
 
 export function save_keystore(rut, body) {
   //return send('/keystore/' + rut, 'POST', body)

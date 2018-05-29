@@ -52,7 +52,7 @@ export default class Settings extends Component {
       <div className="row">
         <div className="col-md-12">
           <div className="row justify-content-center">
-            <div className="col-md-3">
+            <div className="col-md-3 mb-3">
               <div className="card">
                 <div className="card-body text-center">
                   <h1 className="display-5">{from_wei(this.state.balance)}</h1>
@@ -60,7 +60,7 @@ export default class Settings extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6 mb-3">
               <div className="card bg-light">
                 <div className="card-header">Direcciones</div>
                 <ul className="list-group list-group-flush text-center">
@@ -71,7 +71,7 @@ export default class Settings extends Component {
               </div>
             </div>
           </div>
-          <div className="row justify-content-center mt-3">
+          <div className="row justify-content-center">
             <div className="col-md-9">
               <div className="card bg-light">
                 <div className="card-body">
