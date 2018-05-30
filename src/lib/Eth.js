@@ -23,9 +23,8 @@ function signTransaction(rawTx, cb) {
     value: rawTx.value,
     gasLimit: rawTx.gas
   }
-  let signed = signing.signTx(ks, rawTx.pwDerivedKey, txutils.valueTx(tx), rawTx.from)
-  console.log('signed', signed)
-  cb(null, '0x' + signed)
+  let signedTx = signing.signTx(ks, rawTx.pwDerivedKey, txutils.valueTx(tx), rawTx.from)
+  cb(null, '0x' + signedTx)
 }
 
 export function get_accounts() {

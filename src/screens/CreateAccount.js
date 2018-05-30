@@ -5,6 +5,7 @@ import Error from '../components/Error'
 import {create_keys} from '../lib/Lightwallet'
 import {save_keystore} from  '../lib/Api'
 import {validate_rut} from '../lib/Validation'
+import session from '../lib/Session'
 
 export default class CreateAccount extends Component {
   state = {
@@ -34,13 +35,15 @@ export default class CreateAccount extends Component {
 
     this.setState({error: '', loading: true})
     create_keys(password).then(keys => {
+      let keystore = keys.keystore.serialize()
       let data = {
         token: sha3_256(password),
-        keystore: keys.keystore.serialize()
+        keystore
       }
       this.setState({showSeeWords: true})
       save_keystore(rut, data).then(() => {
-        this.props.history.goBack()
+        session.new_session(keystore)
+        this.props.history.push('/private/users')
       }).catch(this.onError)
     })
   }

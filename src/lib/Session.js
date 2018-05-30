@@ -8,8 +8,7 @@ const KEY = 'dispensador-admin-session'
 **/
 class Session {
   constructor() {
-    let keystore = storage.getItem(KEY)
-    this.new_session(keystore)
+    this.new_session(storage.getItem(KEY))
   }
 
   new_session(keystore) {
