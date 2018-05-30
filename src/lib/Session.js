@@ -8,25 +8,32 @@ const KEY = 'dispensador-admin-session'
 **/
 class Session {
   constructor() {
+    this.data = null
     this.new_session(storage.getItem(KEY))
   }
 
-  new_session(keystore) {
-    this.keystore = keystore
+  new_session(keystore, rut) {
     if (keystore !== null) {
-      storage.setItem(KEY, keystore)
-      console.log(keystore)
+      this.data = {
+        rut,
+        keystore
+      }
+      storage.setItem(KEY, this.data)
       initWeb3(keystore)
     }
   }
 
   logout() {
     storage.removeItem(KEY)
-    this.keystore = null
+    this.data = null
   }
 
   valid() {
-    return this.keystore !== null
+    return this.data !== null
+  }
+
+  get_data() {
+    return this.data
   }
 }
 

@@ -32,8 +32,8 @@ export default class Login extends Component {
     }
 
     this.setState({loading: true})
-    get_keystore(rut, sha3_256(password)).then(keys => {
-      session.new_session(keys)
+    get_keystore(rut, sha3_256(password)).then(keystore => {
+      session.new_session(keystore, rut)
       this.props.history.push('/private/users')
     }).catch(this.onError)
   }

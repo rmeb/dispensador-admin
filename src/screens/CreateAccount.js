@@ -42,7 +42,7 @@ export default class CreateAccount extends Component {
       }
       this.setState({showSeeWords: true})
       save_keystore(rut, data).then(() => {
-        session.new_session(keystore)
+        session.new_session(keystore, rut)
         this.props.history.push('/private/users')
       }).catch(this.onError)
     })
@@ -102,7 +102,7 @@ export default class CreateAccount extends Component {
                   <div className="invalid-feedback">{error_repassword}.</div>
                 </div>
                 <Error message={this.state.error} onClick={() => this.setState({error: ''})}/>
-                <button type="submit" className="btn btn-success btn-block">Ingresar</button>
+                <button type="submit" className="btn btn-success btn-block">Crear Cuenta</button>
                 <Link className="btn btn-link btn-block" to="/">Volver</Link>
               </form>
             </div>
