@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import {sha3_256} from 'js-sha3'
 import Error from '../components/Error'
+import LoadingButton from '../components/LoadingButton'
 import {create_keys} from '../lib/Lightwallet'
 import {save_keystore} from  '../lib/Api'
 import {validate_rut} from '../lib/Validation'
@@ -102,7 +103,7 @@ export default class CreateAccount extends Component {
                   <div className="invalid-feedback">{error_repassword}.</div>
                 </div>
                 <Error message={this.state.error} onClick={() => this.setState({error: ''})}/>
-                <button type="submit" className="btn btn-success btn-block">Crear Cuenta</button>
+                <LoadingButton loading={this.state.loading} label="Crear Cuenta"/>
                 <Link className="btn btn-link btn-block" to="/">Volver</Link>
               </form>
             </div>
@@ -111,7 +112,7 @@ export default class CreateAccount extends Component {
       </div>
     )
   }
-}
+  }
 
 function inputValid(err) {
   return 'form-control' + (err.length !== 0 ? ' is-invalid' : '')

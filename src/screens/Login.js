@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import {sha3_256} from 'js-sha3'
 import Error from '../components/Error'
+import LoadingButton from '../components/LoadingButton'
 import {get_keystore} from '../lib/Api'
 import {validate_rut} from '../lib/Validation'
 import session from '../lib/Session'
@@ -82,7 +83,7 @@ export default class Login extends Component {
                   <div className="invalid-feedback">{error_password}.</div>
                 </div>
                 <Error message={this.state.error} onClick={() => this.setState({error: ''})}/>
-                <button type="submit" className="btn btn-primary btn-block">Ingresar</button>
+                <LoadingButton loading={this.state.loading} label="Ingresar"/>
                 <Link className="btn btn-link btn-block" to="/account">Registrarse</Link>
               </form>
             </div>
