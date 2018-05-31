@@ -1,6 +1,6 @@
 import React from 'react'
 
-const WEIMAX = 10000000000000000000
+const WEIMAX = 1000000000000000000
 
 export default ({balance, version}) => (
   <div className="d-flex justify-content-end align-items-center">

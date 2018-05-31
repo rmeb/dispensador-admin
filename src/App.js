@@ -22,8 +22,8 @@ class App extends Component {
     let accounts = get_accounts()
     if (accounts.length > 0) {
       getWeiBalance('0x' + accounts[0]).then(balance => {
-        this.setState({balance: balance.toNumber()})
-      })
+        this.setState({balance})
+      }).catch(console.error)
     }
   }
 
