@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import session from '../lib/Session'
 
+import Battery from './Battery'
+
 const Menu = [{
   to: '/private/users',
   label: 'Usuarios'
@@ -18,7 +20,7 @@ export default class Header extends Component {
   render() {
     let path = this.props.history.location.pathname
     return (
-      <nav className="navbar fixed-top navbar-expand-lg navbar-dark da-bg-primary">
+      <nav className="navbar fixed-top navbar-expand-md navbar-dark da-bg-primary">
         <div className="navbar-brand">Dispensador</div>
         <button id="toggler" className="navbar-toggler" type="button" data-toggle="collapse"
           data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

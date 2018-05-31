@@ -56,6 +56,27 @@ export function getWeiBalance(address) {
     return web3.eth.getBalance(address)
 }
 
+export function network() {
+  return web3.eth.net_version()
+}
+
+export function net_label(netId) {
+  switch (netId) {
+    case '1':
+      return 'Mainnet'
+    case '2':
+      return 'Deprecated'
+    case '3':
+      return 'Ropsten'
+    case '4':
+      return 'Rinkeby'
+    case '42':
+      return 'Kovan'
+    default:
+      return 'Unknown'
+  }
+}
+
 export function from_wei(wei) {
   return (parseInt(wei, 10) / 1000000000000000000)
 }
