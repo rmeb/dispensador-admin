@@ -4,11 +4,6 @@ import session from '../lib/Session'
 
 import Battery from './Battery'
 
-const Menu = [{
-  to: '/private/users',
-  label: 'Usuarios'
-}]
-
 export default class Header extends Component {
   navigate = (to) => {
     window.$('#navbarNav').collapse('hide');
@@ -21,21 +16,13 @@ export default class Header extends Component {
     let path = this.props.history.location.pathname
     return (
       <nav className="navbar fixed-top navbar-expand-md navbar-dark da-bg-primary">
-        <div className="navbar-brand">Dispensador</div>
+        <Link className="navbar-brand" to="/private/dashboard">Dispensador</Link>
         <button id="toggler" className="navbar-toggler" type="button" data-toggle="collapse"
           data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav mr-auto">
-            {Menu.map((m, i) => (
-              <li key={i} className={"nav-item" + (m.to === path ? " active" : "")}>
-                <a className="nav-link" onClick={e => this.navigate(m.to)}>{m.label}</a>
-              </li>
-            ))}
-          </ul>
-          <div className="dropdown-divider"></div>
-          <ul className="navbar-nav">
+          <ul className="navbar-nav ml-auto">
             <li className="nav-item dropdown active">
               <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">

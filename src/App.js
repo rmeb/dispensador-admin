@@ -46,7 +46,6 @@ class App extends Component {
             <PrivateRoute path="/private" component={BatteryPanel}
               balance={this.state.balance} network={this.state.network}/>
             <PrivateRoute path="/private/dashboard" component={Dashboard}/>
-            <PrivateRoute path="/private/users" component={Users}/>
             <PrivateRoute path="/private/settings" component={Settings}/>
           </div>
           <ExitModal onClick={this.logout}/>

@@ -1,5 +1,5 @@
 import session from './Session'
-const APIURL = 'http://localhost:4000'
+const APIURL = 'http://192.168.0.25:4000'
 //const APIURL = 'https://rx-keyserver.herokuapp.com'
 
 export function save_keystore(rut, body) {

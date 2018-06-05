@@ -75,7 +75,7 @@ export default class Settings extends Component {
             <div className="col-md-12">
               <div className="card bg-light">
                 <div className="card-body">
-                  <button className="btn btn-danger" data-toggle="modal" data-target="#wordsModal">Mostrar Seed Words</button>
+                  <button className="btn btn-danger btn-block" data-toggle="modal" data-target="#wordsModal">Mostrar Seed Words</button>
                   {/*<button className="btn btn-danger" onClick={this.sendEth}>Recuperar</button>*/}
                   {this.state.words.length === 0 ? null :
                     <div className="card mt-3">
