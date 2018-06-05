@@ -23,10 +23,7 @@ export function get_keystore(rut, token) {
 
 export function refund(address) {
   return send('/refund/' + address, {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + session.data.token
-    }
+    method: 'GET'
   })
 }
 
