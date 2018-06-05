@@ -4,7 +4,7 @@ import Error from '../components/Error'
 const AUTHORIZED = 'AUTHORIZED'
 const DENY = 'DENY'
 
-export default class Users extends Component {
+export default class Dashboard extends Component {
   state = {
     address: '',
     status: '',

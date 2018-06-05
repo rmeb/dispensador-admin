@@ -4,6 +4,7 @@ import {refund} from '../lib/Api'
 
 const WEIMAX = 1000000000000000000
 
+//TODO crear componente, colocar logica de balance aqui, refrescar cada x segundos
 export default ({balance, version}) => (
   <div className="d-flex justify-content-end align-items-center">
     <span className="mr-2">{version}</span>
@@ -42,7 +43,6 @@ function submit(e) {
   e.preventDefault()
   window.$('#refundModal').modal('toggle')
   let account = get_accounts()[0]
-  console.log('0x' + account)
   refund(account).then(console.log).catch(console.error)
 }
 
