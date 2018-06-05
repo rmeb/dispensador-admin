@@ -44,7 +44,7 @@ export default class Header extends Component {
               <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" onClick={e => this.navigate("/private/settings")}><i className="fas fa-cog"></i> Configuracion</a>
                 <div className="dropdown-divider"></div>
-                <Link className="dropdown-item" to="/" onClick={e => session.logout()}><i className="fas fa-sign-out-alt"></i> Salir</Link>
+                <a className="dropdown-item" data-toggle="modal" data-target="#exitModal"><i className="fas fa-sign-out-alt"></i> Salir</a>
               </div>
             </li>
           </ul>
