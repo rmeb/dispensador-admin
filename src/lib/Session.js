@@ -14,8 +14,8 @@ class Session {
     }
   }
 
-  new_session(keystore, rut) {
-    this.data = {rut, keystore}
+  new_session(keystore, rut, token) {
+    this.data = {rut, keystore, token}
     storage.setItem(KEY, JSON.stringify(this.data))
     initWeb3(keystore)
   }

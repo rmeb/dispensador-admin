@@ -43,7 +43,7 @@ export default class CreateAccount extends Component {
       }
       this.setState({showSeeWords: true})
       save_keystore(rut, data).then(() => {
-        session.new_session(keystore, rut)
+        session.new_session(keystore, rut, data.token)
         this.props.history.push('/private/users')
       }).catch(this.onError)
     })

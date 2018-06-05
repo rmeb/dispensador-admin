@@ -16,6 +16,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    if (!session.valid()) {
+      return
+    }
     network().then(netId => {
       this.setState({network: net_label(netId)})
     }).catch(console.error)

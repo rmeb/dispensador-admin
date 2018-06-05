@@ -1,8 +1,8 @@
+import session from './Session'
 const APIURL = 'http://localhost:4000'
 //const APIURL = 'https://rx-keyserver.herokuapp.com'
 
 export function save_keystore(rut, body) {
-  //return send('/keystore/' + rut, 'POST', body)
   return send('/keystore/' + rut, {
     method: 'POST',
     headers: {
@@ -13,12 +13,19 @@ export function save_keystore(rut, body) {
 }
 
 export function get_keystore(rut, token) {
-  //return send('/keystore/' + rut, 'GET', {}, token)
-  console.log(token)
   return send('/keystore/' + rut, {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + token
+    }
+  })
+}
+
+export function refund(address) {
+  return send('/refund/' + address, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + session.data.token
     }
   })
 }
