@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import BN from 'bn.js'
-import {get_accounts, getWeiBalance, from_wei, get_seed_words, sendTransaction,
-  get_derived_key} from '../lib/Eth'
+import {get_accounts, getWeiBalance, from_wei, get_seed_words, sendTransaction} from '../lib/Eth'
 
 export default class Settings extends Component {
   state = {

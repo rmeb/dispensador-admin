@@ -1,19 +1,40 @@
-import React from 'react'
-import {get_accounts} from '../lib/Eth'
+import React, {Component} from 'react'
+import {network, net_label, get_accounts, getWeiBalance} from '../lib/Eth'
 import {refund} from '../lib/Api'
 
 const WEIMAX = 1000000000000000000
 
-//TODO crear componente, colocar logica de balance aqui, refrescar cada x segundos
-export default ({balance, version}) => (
-  <div className="d-flex justify-content-end align-items-center">
-    <span className="mr-2">{version}</span>
-    <a data-toggle="modal" data-target="#refundModal">
-      <i className={"fas fa-2x fa-battery-" + batteryLevel(balance / WEIMAX)} />
-    </a>
-    <RefundModal />
-  </div>
-)
+//TODO refrescar cada x segundos
+export default class Baterry extends Component {
+  state = {
+    network: '',
+    balance: 0
+  }
+
+  componentDidMount() {
+    network().then(netId => {
+      this.setState({network: net_label(netId)})
+    }).catch(console.error)
+    let accounts = get_accounts()
+    if (accounts.length > 0) {
+      getWeiBalance('0x' + accounts[0]).then(balance => {
+        this.setState({balance})
+      }).catch(console.error)
+    }
+  }
+
+  render() {
+    return (
+      <div className="d-flex justify-content-end align-items-center">
+        <span className="mr-2">{this.state.network}</span>
+        <a data-toggle="modal" data-target="#refundModal">
+          <i className={"fas fa-2x fa-battery-" + batteryLevel(this.state.balance / WEIMAX)} />
+        </a>
+        <RefundModal />
+      </div>
+    )
+  }
+}
 
 const RefundModal = () => (
   <form onSubmit={submit}>

@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import session from '../lib/Session'
 
-import Battery from './Battery'
-
 export default class Header extends Component {
   navigate = (to) => {
     window.$('#navbarNav').collapse('hide');
@@ -13,7 +11,7 @@ export default class Header extends Component {
   }
 
   render() {
-    let path = this.props.history.location.pathname
+    //let path = this.props.history.location.pathname
     return (
       <nav className="navbar fixed-top navbar-expand-md navbar-dark da-bg-primary">
         <Link className="navbar-brand" to="/private/dashboard">Dispensador</Link>

@@ -1,35 +1,14 @@
 import React, { Component } from 'react';
 import {HashRouter as Router, Route, Redirect, Link} from 'react-router-dom'
-import {Dashboard, Users, Settings, Login, CreateAccount} from './screens'
+import {Dashboard, Settings, Login, CreateAccount} from './screens'
 import Header from './components/Header'
 import Battery from './components/Battery'
 
 import session from './lib/Session'
-import {network, net_label, get_accounts, getWeiBalance} from './lib/Eth'
 
 import './App.css';
 
 class App extends Component {
-  state = {
-    network: '',
-    balance: 0
-  }
-
-  componentDidMount() {
-    if (!session.valid()) {
-      return
-    }
-    network().then(netId => {
-      this.setState({network: net_label(netId)})
-    }).catch(console.error)
-    let accounts = get_accounts()
-    if (accounts.length > 0) {
-      getWeiBalance('0x' + accounts[0]).then(balance => {
-        this.setState({balance})
-      }).catch(console.error)
-    }
-  }
-
   logout = (e) => {
     session.logout()
     window.$('#exitModal').modal('toggle')
@@ -43,8 +22,7 @@ class App extends Component {
           <Route exact path="/account" component={CreateAccount}/>
           <PrivateRoute path="/private" component={Header}/>
           <div className="da-body-margin">
-            <PrivateRoute path="/private" component={BatteryPanel}
-              balance={this.state.balance} network={this.state.network}/>
+            <PrivateRoute path="/private" component={BatteryPanel}/>
             <PrivateRoute path="/private/dashboard" component={Dashboard}/>
             <PrivateRoute path="/private/settings" component={Settings}/>
           </div>
@@ -65,7 +43,7 @@ const BatteryPanel = ({balance, network}) => (
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => session.valid() ? (
-      <Component {...props} {...rest}/>
+      <Component {...props}/>
     ) : (
       <Redirect to={{pathname: "/", state: { from: props.location }}}/>
     )
