@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Error from '../components/Error'
+import {isAllowed, denyUser, allowUser} from '../lib/Eth'
 
 const AUTHORIZED = 'AUTHORIZED'
 const DENY = 'DENY'
@@ -14,17 +15,32 @@ export default class Dashboard extends Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    this.setState({status: AUTHORIZED})
+    this.allowance(this.state.address, isAllowed).then(status => {
+      this.setState({status: status ? AUTHORIZED : DENY})
+    })
   }
 
   authorize = (e) => {
     e.preventDefault()
-    this.setState({status: AUTHORIZED})
+    this.allowance(this.state.address, allowUser)
+      .then(r => {
+        console.log(r)
+        this.setState({status: AUTHORIZED})
+      })
   }
 
   deny = (e) => {
     e.preventDefault()
-    this.setState({status: DENY})
+    this.allowance(this.state.address, denyUser)
+      .then(() => this.setState({status: DENY}))
+  }
+
+  allowance = (address, fn) => {
+    address = address.trim()
+    if (address.length === 0) {
+      return Promise.reject('direccion requerida.')
+    }
+    return fn(address).catch(console.error)
   }
 
   onAddress = (e) => {

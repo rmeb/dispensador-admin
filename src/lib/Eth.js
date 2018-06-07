@@ -1,8 +1,10 @@
+import {AllowanceRegistry} from 'rmeb-contracts'
 import {restore_keystore} from './Lightwallet'
 import {signing, txutils} from 'eth-lightwallet'
 const SignerProvider = require('ethjs-provider-signer');
-const Eth = require('ethjs-query');
+const Web3 = require('web3')
 
+let instanceContract = null
 let web3;
 let ks;
 
@@ -10,8 +12,39 @@ export function initWeb3(keystore){
     ks = restore_keystore(keystore)
     ks.signTransaction = signTransaction
     const provider = new SignerProvider('https://rinkeby.infura.io', ks);
-    const eth = new Eth(provider);
-    web3={ eth:eth };
+    web3 = new Web3(provider)
+    initContract()
+}
+
+export function initContract() {
+  return web3.eth.net.getId().then(networkId => {
+    let artifact = AllowanceRegistry.v1;
+    let abi = artifact.abi;
+    let addr = artifact.networks[networkId].address
+    instanceContract = new web3.eth.Contract(abi, addr);
+  })
+}
+
+export function isAllowed(address) {
+  if (instanceContract !== null) {
+    return instanceContract.methods.isAllowed(address).call()
+  }
+  return Promise.reject('Contrato no inicializado')
+}
+
+export function allowUser(address) {
+  if (instanceContract !== null) {
+    let from = '0x' + ks.addresses[0]
+    return instanceContract.methods.allowUser(address).send({from})
+  }
+  return Promise.reject('Contrato no inicializado')
+}
+
+export function denyUser(address) {
+  if (instanceContract !== null) {
+    return instanceContract.methods.denyUser(address).call()
+  }
+  return Promise.reject('Contrato no inicializado')
 }
 
 function signTransaction(rawTx, cb) {
@@ -21,7 +54,8 @@ function signTransaction(rawTx, cb) {
     gasPrice: rawTx.gasPrice,
     to: rawTx.to,
     value: rawTx.value,
-    gasLimit: rawTx.gas
+    gasLimit: rawTx.gas,
+    data: rawTx.data
   }
   let signedTx = signing.signTx(ks, rawTx.pwDerivedKey, txutils.valueTx(tx), rawTx.from)
   cb(null, '0x' + signedTx)
@@ -29,12 +63,6 @@ function signTransaction(rawTx, cb) {
 
 export function get_accounts() {
     return ks.addresses
-    /*return web3.eth.accounts((e, r) => {
-      if (e) {
-        return console.log(e)
-      }
-      return r
-    })*/
 }
 
 export function get_seed_words(password) {
@@ -57,20 +85,20 @@ export function getWeiBalance(address) {
 }
 
 export function network() {
-  return web3.eth.net_version()
+  return web3.eth.net.getId()
 }
 
 export function net_label(netId) {
   switch (netId) {
-    case '1':
+    case 1:
       return 'Mainnet'
-    case '2':
+    case 2:
       return 'Deprecated'
-    case '3':
+    case 3:
       return 'Ropsten'
-    case '4':
+    case 4:
       return 'Rinkeby'
-    case '42':
+    case 42:
       return 'Kovan'
     default:
       return 'Unknown'
