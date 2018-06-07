@@ -8,6 +8,26 @@ let instanceContract = null
 let web3;
 let ks;
 
+function signTransaction(rawTx, cb) {
+  console.log('signing', rawTx)
+  let tx = {
+    nonce: rawTx.nonce,
+    gasPrice: rawTx.gasPrice,
+    to: rawTx.to,
+    value: rawTx.value,
+    gasLimit: rawTx.gas,
+    data: rawTx.data
+  }
+  console.log(tx)
+  get_derived_key('asdf').then(pwDerivedKey => {
+    let contractTx = txutils.createContractTx(rawTx.from, tx)
+    console.log(contractTx)
+    let signedTx = signing.signTx(ks, pwDerivedKey, contractTx.tx, rawTx.from)
+    console.log(signedTx)
+    cb(null, '0x' + signedTx)
+  }).catch(e => cb(e))
+}
+
 export function initWeb3(keystore){
     ks = restore_keystore(keystore)
     ks.signTransaction = signTransaction
@@ -21,7 +41,11 @@ export function initContract() {
     let artifact = AllowanceRegistry.v1;
     let abi = artifact.abi;
     let addr = artifact.networks[networkId].address
-    instanceContract = new web3.eth.Contract(abi, addr);
+    instanceContract = new web3.eth.Contract(abi, addr, {
+      from: '0x' + ks.addresses[0],
+      gas: 300000,
+      gasPrice: '10000000000'
+    });
   })
 }
 
@@ -34,8 +58,7 @@ export function isAllowed(address) {
 
 export function allowUser(address) {
   if (instanceContract !== null) {
-    let from = '0x' + ks.addresses[0]
-    return instanceContract.methods.allowUser(address).send({from})
+    return instanceContract.methods.allowUser(address).send()
   }
   return Promise.reject('Contrato no inicializado')
 }
@@ -45,20 +68,6 @@ export function denyUser(address) {
     return instanceContract.methods.denyUser(address).call()
   }
   return Promise.reject('Contrato no inicializado')
-}
-
-function signTransaction(rawTx, cb) {
-  console.log('signing', rawTx)
-  let tx = {
-    nonce: rawTx.nonce,
-    gasPrice: rawTx.gasPrice,
-    to: rawTx.to,
-    value: rawTx.value,
-    gasLimit: rawTx.gas,
-    data: rawTx.data
-  }
-  let signedTx = signing.signTx(ks, rawTx.pwDerivedKey, txutils.valueTx(tx), rawTx.from)
-  cb(null, '0x' + signedTx)
 }
 
 export function get_accounts() {

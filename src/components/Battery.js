@@ -76,7 +76,7 @@ function batteryLevel(fuel) {
   } else if (fuel < 0.5) {
     battery = 'half'
   } else if (fuel < 0.8) {
-    battery = 'three-quarter'
+    battery = 'three-quarters'
   }
   return battery
 }
