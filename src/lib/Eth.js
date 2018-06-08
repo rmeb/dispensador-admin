@@ -32,8 +32,8 @@ export function initWeb3(keystore){
     ks = restore_keystore(keystore)
     ks.signTransaction = signTransaction
     const provider = new SignerProvider('https://rinkeby.infura.io', ks);
-    //web3 = new Web3(provider)
-    web3 = new Web3(window.web3.currentProvider)
+    web3 = new Web3(provider)
+    //web3 = new Web3(window.web3.currentProvider)
     initContract()
 }
 
@@ -42,11 +42,11 @@ export function initContract() {
     let artifact = AllowanceRegistry.v1;
     let abi = artifact.abi;
     let addr = artifact.networks[networkId].address
-    instanceContract = new web3.eth.Contract(abi, addr/*, {
+    instanceContract = new web3.eth.Contract(abi, addr, {
       from: '0x' + ks.addresses[0],
       gas: 300000,
       gasPrice: '100000000000'
-    }*/);
+    });
   })
 }
 
@@ -59,14 +59,14 @@ export function isAllowed(address) {
 
 export function allowUser(address) {
   if (instanceContract !== null) {
-    return instanceContract.methods.allowUser(address).send({from: '0x0ed1645E90707dEd52186ed032011EE174004450'})
+    return instanceContract.methods.allowUser(address).send()
   }
   return Promise.reject('Contrato no inicializado')
 }
 
 export function denyUser(address) {
   if (instanceContract !== null) {
-    return instanceContract.methods.denyUser(address).call()
+    return instanceContract.methods.denyUser(address).send()
   }
   return Promise.reject('Contrato no inicializado')
 }
