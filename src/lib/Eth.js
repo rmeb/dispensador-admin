@@ -33,7 +33,6 @@ export function initWeb3(keystore){
     ks.signTransaction = signTransaction
     const provider = new SignerProvider('https://rinkeby.infura.io', ks);
     web3 = new Web3(provider)
-    //web3 = new Web3(window.web3.currentProvider)
     initContract()
 }
 
@@ -43,9 +42,9 @@ export function initContract() {
     let abi = artifact.abi;
     let addr = artifact.networks[networkId].address
     instanceContract = new web3.eth.Contract(abi, addr, {
-      from: '0x' + ks.addresses[0],
-      gas: 300000,
-      gasPrice: '100000000000'
+      from: '0x' + ks.addresses[0]
+      ,gas: 300000,
+      //gasPrice: '10000000000'
     });
   })
 }

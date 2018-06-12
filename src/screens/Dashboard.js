@@ -10,37 +10,51 @@ export default class Dashboard extends Component {
     address: '',
     status: '',
     error_address: '',
-    error: ''
+    error: '',
+    loading: false
   }
 
   onSubmit = (e) => {
     e.preventDefault()
-    this.allowance(this.state.address, isAllowed).then(status => {
-      this.setState({status: status ? AUTHORIZED : DENY})
+    this.setState({loading: true, status: ''})
+    isAllowed(this.state.address).then(status => {
+      this.setState({status: status ? AUTHORIZED : DENY, loading: false})
+    }).catch(e => {
+      this.setState({loading: false})
+      console.error('[isAllowed]', e)
     })
   }
 
   authorize = (e) => {
     e.preventDefault()
-    this.allowance(this.state.address, allowUser)
-      .then(r => {
-        console.log(r)
-        this.setState({status: AUTHORIZED})
-      })
+    let address = this.state.address.trim()
+    if (address.length === 0) {
+      return Promise.reject('direccion requerida.')
+    }
+    this.setState({loading: true})
+    allowUser(address).then(r => {
+      console.log('[allowUser]', r)
+      this.setState({status: AUTHORIZED, loading: false})
+    }).catch(e => {
+      console.error('[allowUser]', e)
+      this.setState({loading: false})
+    })
   }
 
   deny = (e) => {
     e.preventDefault()
-    this.allowance(this.state.address, denyUser)
-      .then(() => this.setState({status: DENY}))
-  }
-
-  allowance = (address, fn) => {
-    address = address.trim()
+    let address = this.state.address.trim()
     if (address.length === 0) {
       return Promise.reject('direccion requerida.')
     }
-    return fn(address).catch(console.error)
+    this.setState({loading: true})
+    denyUser(this.state.address, denyUser).then(r => {
+      console.log('[denyUser]', r)
+      this.setState({status: DENY, loading: false})
+    }).catch(e => {
+      console.error('[denyUser]', e)
+      this.setState({loading: false})
+    })
   }
 
   onAddress = (e) => {
@@ -69,7 +83,7 @@ export default class Dashboard extends Component {
                   <div className="invalid-feedback">{error_address}</div>
                 </div>
                 {this._renderMessage()}
-                <button className="btn btn-primary btn-block">Estado</button>
+                <button className="btn btn-primary btn-block" disabled={this.state.loading}>Estado</button>
                 {this._renderButton()}
               </form>
             </div>
@@ -89,9 +103,13 @@ export default class Dashboard extends Component {
 
   _renderButton = () => {
     if (this.state.status === AUTHORIZED)
-      return <button className="btn btn-danger btn-block" onClick={this.deny}>Denegar</button>
+      return <button className="btn btn-danger btn-block" onClick={this.deny}  disabled={this.state.loading}>
+        {this.state.loading ? <i className="fa fa-circle-notch fa-spin"></i> : 'Denegar'}
+      </button>
     if (this.state.status === DENY)
-      return <button className="btn btn-success btn-block" onClick={this.authorize}>Autorizar</button>
+      return <button className="btn btn-success btn-block" onClick={this.authorize}  disabled={this.state.loading}>
+        {this.state.loading ? <i className="fa fa-circle-notch fa-spin"></i> : 'Autorizar'}
+      </button>
     return null
   }
 }
