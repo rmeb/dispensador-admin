@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Error from '../components/Error'
-import {isAllowed, denyUser, allowUser} from '../lib/Eth'
+import {isAllowed, denyUser, allowUser, isRegistrar} from '../lib/Eth'
 
 const AUTHORIZED = 'AUTHORIZED'
 const DENY = 'DENY'
@@ -11,50 +11,51 @@ export default class Dashboard extends Component {
     status: '',
     error_address: '',
     error: '',
+    registrar: false,
     loading: false
+  }
+
+  componentDidMount() {
+    isRegistrar().then(registrar => this.setState({registrar}))
   }
 
   onSubmit = (e) => {
     e.preventDefault()
     this.setState({loading: true, status: ''})
-    isAllowed(this.state.address).then(status => {
+    this.checkAddress().then(isAllowed).then(status => {
       this.setState({status: status ? AUTHORIZED : DENY, loading: false})
-    }).catch(e => {
-      this.setState({loading: false})
-      console.error('[isAllowed]', e)
-    })
+    }).catch(this.onError)
+  }
+
+  onError = (e) => {
+    this.setState({loading: false, error: e.message ? e.message : e})
+    console.error(e)
+  }
+
+  checkAddress = () => {
+    let address = this.state.address.trim()
+    if (address.length === 0) {
+      return Promise.reject('Direccion requerida.')
+    }
+    return Promise.resolve(address)
   }
 
   authorize = (e) => {
     e.preventDefault()
-    let address = this.state.address.trim()
-    if (address.length === 0) {
-      return Promise.reject('direccion requerida.')
-    }
     this.setState({loading: true})
-    allowUser(address).then(r => {
+    this.checkAddress().then(allowUser).then(r => {
       console.log('[allowUser]', r)
       this.setState({status: AUTHORIZED, loading: false})
-    }).catch(e => {
-      console.error('[allowUser]', e)
-      this.setState({loading: false})
-    })
+    }).catch(this.onError)
   }
 
   deny = (e) => {
     e.preventDefault()
-    let address = this.state.address.trim()
-    if (address.length === 0) {
-      return Promise.reject('direccion requerida.')
-    }
     this.setState({loading: true})
-    denyUser(this.state.address, denyUser).then(r => {
+    this.checkAddress().then(denyUser).then(r => {
       console.log('[denyUser]', r)
       this.setState({status: DENY, loading: false})
-    }).catch(e => {
-      console.error('[denyUser]', e)
-      this.setState({loading: false})
-    })
+    }).catch(this.onError)
   }
 
   onAddress = (e) => {
@@ -72,7 +73,7 @@ export default class Dashboard extends Component {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <Error message={this.state.error} onClose={() => this.setState({message: ''})} />
+          <Error message={this.state.error} onClick={() => this.setState({error: ''})} />
           <div className="card bg-light">
             <div className="card-body">
               <form onSubmit={this.onSubmit}>
@@ -102,6 +103,7 @@ export default class Dashboard extends Component {
   }
 
   _renderButton = () => {
+    if (!this.state.registrar) return null
     if (this.state.status === AUTHORIZED)
       return <button className="btn btn-danger btn-block" onClick={this.deny}  disabled={this.state.loading}>
         {this.state.loading ? <i className="fa fa-circle-notch fa-spin"></i> : 'Denegar'}

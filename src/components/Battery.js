@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {network, net_label, get_accounts, getWeiBalance} from '../lib/Eth'
 import {refund} from '../lib/Api'
 
-const WEIMAX = 1000000000000000000
+const WEIMAX = 10000000000000000
 
 //TODO refrescar cada x segundos
 export default class Baterry extends Component {
@@ -15,6 +15,15 @@ export default class Baterry extends Component {
     network().then(netId => {
       this.setState({network: net_label(netId)})
     }).catch(console.error)
+    this.refresh()
+    this._timer = setInterval(this.refresh, 3000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._timer)
+  }
+
+  refresh = () => {
     let accounts = get_accounts()
     if (accounts.length > 0) {
       getWeiBalance('0x' + accounts[0]).then(balance => {
@@ -70,7 +79,7 @@ function submit(e) {
 function batteryLevel(fuel) {
   let battery = 'full'
   if (fuel < 0.1) {
-    battery = 'empty'
+    battery = 'slash'
   } else if (fuel < 0.3) {
     battery = 'quarter'
   } else if (fuel < 0.5) {

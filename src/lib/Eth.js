@@ -49,6 +49,13 @@ export function initContract() {
   })
 }
 
+export function isRegistrar() {
+  if (instanceContract !== null) {
+    return instanceContract.methods.registrars('0x' + ks.addresses[0]).call()
+  }
+  return Promise.reject('Contrato no inicializado')
+}
+
 export function isAllowed(address) {
   if (instanceContract !== null) {
     return instanceContract.methods.isAllowed(address).call()
