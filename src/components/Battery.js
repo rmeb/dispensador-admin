@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {network, net_label, get_accounts, getWeiBalance} from '../lib/Eth'
+import {network, net_label, get_accounts, getWeiBalance,
+  getTransaction} from '../lib/Eth'
 import {refund} from '../lib/Api'
 
 const WEIMAX = 10000000000000000
@@ -8,7 +9,8 @@ const WEIMAX = 10000000000000000
 export default class Baterry extends Component {
   state = {
     network: '',
-    balance: 0
+    balance: 0,
+    recharging: false
   }
 
   componentDidMount() {
@@ -32,20 +34,47 @@ export default class Baterry extends Component {
     }
   }
 
+  submit = (e) => {
+    e.preventDefault()
+    window.$('#refundModal').modal('toggle')
+    let account = get_accounts()[0]
+    refund(account).then(data => {
+      console.log(data)
+      this.setState({recharging: true})
+      let timer = setInterval(() => {
+        getTransaction(data.txHash).then(tx => {
+          console.log('getTx', tx)
+          if (tx.blockNumber !== null) {
+            this.setState({recharging: false})
+            clearInterval(timer)
+          }
+        }).catch(e => {
+          console.error('[recharge]', e)
+          this.setState({recharging: false})
+        })
+      }, 15000)
+    }).catch(e => {
+      console.error('[recharge]', e)
+    })
+  }
+
   render() {
     return (
       <div className="d-flex justify-content-end align-items-center">
         <span className="mr-2">{this.state.network}</span>
-        <a data-toggle="modal" data-target="#refundModal">
-          <i className={"fas fa-2x fa-battery-" + batteryLevel(this.state.balance / WEIMAX)} />
-        </a>
-        <RefundModal />
+        {this.state.recharging ?
+          <i className="fas fa-battery-bolt fa-2x"/>:
+          <a data-toggle="modal" data-target="#refundModal">
+            <i className={"fas fa-2x fa-battery-" + batteryLevel(this.state.balance / WEIMAX)} />
+          </a>
+        }
+        <RefundModal submit={this.submit}/>
       </div>
     )
   }
 }
 
-const RefundModal = () => (
+const RefundModal = ({submit}) => (
   <form onSubmit={submit}>
     <div className="modal fade" id="refundModal" tabIndex="-1" role="dialog">
       <div className="modal-dialog" role="document">
@@ -69,12 +98,7 @@ const RefundModal = () => (
   </form>
 )
 
-function submit(e) {
-  e.preventDefault()
-  window.$('#refundModal').modal('toggle')
-  let account = get_accounts()[0]
-  refund(account).then(console.log).catch(console.error)
-}
+
 
 function batteryLevel(fuel) {
   let battery = 'full'

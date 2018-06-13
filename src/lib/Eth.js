@@ -100,6 +100,10 @@ export function getWeiBalance(address) {
     return web3.eth.getBalance(address)
 }
 
+export function getTransaction(txHash) {
+  return web3.eth.getTransaction(txHash)
+}
+
 export function network() {
   return web3.eth.net.getId()
 }
