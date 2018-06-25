@@ -27,7 +27,7 @@ export default class Header extends Component {
                 <i className="fas fa-user-circle fa-lg"></i> {session.get_data().rut}
               </a>
               <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item" onClick={e => this.navigate("/private/settings")}><i className="fas fa-cog"></i> Configuracion</a>
+                <a className="dropdown-item" onClick={e => this.navigate("/private/settings")}><i className="fas fa-cog"></i> Ajustes</a>
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" data-toggle="modal" data-target="#exitModal"><i className="fas fa-sign-out-alt"></i> Salir</a>
               </div>
