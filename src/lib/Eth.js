@@ -33,7 +33,7 @@ export function initWeb3(keystore){
     ks.signTransaction = signTransaction
     const provider = new SignerProvider('https://rinkeby.infura.io', ks);
     web3 = new Web3(provider)
-    initContract()
+    return initContract()
 }
 
 export function initContract() {

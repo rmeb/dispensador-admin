@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
 import {HashRouter as Router, Route, Redirect, Link} from 'react-router-dom'
 import {Dashboard, Settings, Login, CreateAccount} from './screens'
+import Error from './components/Error'
 import Header from './components/Header'
 import Battery from './components/Battery'
+import Loading from './components/Loading'
 
 import session from './lib/Session'
 
 import './App.css';
 
 class App extends Component {
+  state = {
+    error: '',
+    loading: true
+  }
+
+  componentDidMount() {
+    session.init().then(() => this.setState({loading: false})).catch(() => this.setState({loading: false}))
+  }
+
   logout = (e) => {
     session.logout()
     window.$('#exitModal').modal('toggle')
   }
 
   render() {
+    if (this.state.loading) return <Loading />
     return (
       <Router>
         <div className="container">
@@ -22,8 +34,9 @@ class App extends Component {
           <Route exact path="/account" component={CreateAccount}/>
           <PrivateRoute path="/private" component={Header}/>
           <div className="da-body-margin">
-            <PrivateRoute path="/private" component={BatteryPanel}/>
-            <PrivateRoute path="/private/dashboard" component={Dashboard}/>
+            <PrivateRoute path="/private" component={BatteryPanel} onError={error => this.setState({error})}/>
+            <PrivateRoute path="/private" component={Error} message={this.state.error} onClick={() => this.setState({error: ''})}/>
+            <PrivateRoute path="/private/dashboard" component={Dashboard} onError={error => this.setState({error})}/>
             <PrivateRoute path="/private/settings" component={Settings}/>
           </div>
           <ExitModal onClick={this.logout}/>
@@ -33,17 +46,17 @@ class App extends Component {
   }
 }
 
-const BatteryPanel = ({balance, network}) => (
+const BatteryPanel = ({onError}) => (
   <div className="row mb-3 justify-content-end">
     <div className="col-sm-12">
-      <Battery balance={balance} version={network}/>
+      <Battery onError={onError} />
     </div>
   </div>
 )
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => session.valid() ? (
-      <Component {...props}/>
+      <Component {...props} {...rest}/>
     ) : (
       <Redirect to={{pathname: "/", state: { from: props.location }}}/>
     )

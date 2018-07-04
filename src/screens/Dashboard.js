@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Error from '../components/Error'
 import {isAllowed, denyUser, allowUser, isRegistrar} from '../lib/Eth'
 
 const AUTHORIZED = 'AUTHORIZED'
@@ -10,13 +9,12 @@ export default class Dashboard extends Component {
     address: '',
     status: '',
     error_address: '',
-    error: '',
     registrar: false,
     loading: false
   }
 
   componentDidMount() {
-    isRegistrar().then(registrar => this.setState({registrar}))
+    isRegistrar().then(registrar => this.setState({registrar})).catch(this.onError)
   }
 
   onSubmit = (e) => {
@@ -28,8 +26,8 @@ export default class Dashboard extends Component {
   }
 
   onError = (e) => {
-    this.setState({loading: false, error: e.message ? e.message : e})
-    console.error(e)
+    this.setState({loading: false})
+    this.props.onError(e.message ? e.message : e)
   }
 
   checkAddress = () => {
@@ -73,7 +71,6 @@ export default class Dashboard extends Component {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <Error message={this.state.error} onClick={() => this.setState({error: ''})} />
           <div className="card bg-light">
             <div className="card-body">
               <form onSubmit={this.onSubmit}>

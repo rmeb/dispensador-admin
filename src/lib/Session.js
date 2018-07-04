@@ -9,15 +9,19 @@ const KEY = 'dispensador-admin-session'
 class Session {
   constructor() {
     this.data = JSON.parse(storage.getItem(KEY))
+  }
+
+  init() {
     if (this.data !== null) {
-      initWeb3(this.data.keystore)
+      return initWeb3(this.data.keystore)
     }
+    return Promise.reject('logoff')
   }
 
   new_session(keystore, rut, token) {
     this.data = {rut, keystore, token}
     storage.setItem(KEY, JSON.stringify(this.data))
-    initWeb3(keystore)
+    return initWeb3(keystore)
   }
 
   logout() {
