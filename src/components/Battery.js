@@ -66,7 +66,7 @@ export default class Baterry extends Component {
         <span className="mr-2">{this.state.network}</span>
         {this.state.recharging ?
           <i className="fas fa-battery-bolt fa-2x"/>:
-          <a data-toggle="modal" data-target="#refundModal">
+          <a data-toggle="modal" data-target="#refundModal" className="cs-pointer">
             <i className={"fas fa-2x fa-battery-" + batteryLevel(this.state.balance / WEIMAX)} />
           </a>
         }

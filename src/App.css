@@ -39,3 +39,7 @@
 .da-empty:empty {
   display: none;
 }
+
+.cs-pointer {
+  cursor: pointer;
+}
