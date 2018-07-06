@@ -8,7 +8,12 @@ const KEY = 'dispensador-admin-session'
 **/
 class Session {
   constructor() {
-    this.data = JSON.parse(storage.getItem(KEY))
+    this.data = null
+    if (storage) {
+      this.data = JSON.parse(storage.getItem(KEY))
+    } else {
+      console.log('no existe local storage.')
+    }
   }
 
   init() {
