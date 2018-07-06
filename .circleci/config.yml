@@ -18,6 +18,9 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: install-surge
+          command: 'sudo yarn global add surge'
 
       # Download and cache dependencies
       - restore_cache:
@@ -27,7 +30,7 @@ jobs:
           - v1-dependencies-
 
       - run: yarn install
-      - run: yarn global add surge
+
       - save_cache:
           paths:
             - node_modules
