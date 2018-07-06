@@ -27,7 +27,7 @@ jobs:
           - v1-dependencies-
 
       - run: yarn install
-      - run: yarn add global surge
+      - run: yarn global add surge
       - save_cache:
           paths:
             - node_modules
