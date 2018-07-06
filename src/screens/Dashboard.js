@@ -120,7 +120,7 @@ const MessageCard = ({message}) => (
     </div>
   </div>
 )
-
+/*
 const SuccessMessage = ({children, close}) => (
   <div className="alert alert-success alert-dismissible fade show" role="alert">
     {children}
@@ -128,7 +128,7 @@ const SuccessMessage = ({children, close}) => (
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-)
+)*/
 
 function valid(e) {
   return 'form-control' + (e.length !== 0 ? ' is-invalid' : '')
