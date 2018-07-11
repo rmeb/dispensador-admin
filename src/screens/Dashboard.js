@@ -10,7 +10,8 @@ export default class Dashboard extends Component {
     status: '',
     error_address: '',
     registrar: false,
-    loading: false
+    loading: false,
+    password: ''
   }
 
   componentDidMount() {
@@ -38,21 +39,16 @@ export default class Dashboard extends Component {
     return Promise.resolve(address)
   }
 
-  authorize = (e) => {
+  submit = (e) => {
     e.preventDefault()
-    this.setState({loading: true})
-    this.checkAddress().then(allowUser).then(r => {
-      console.log('[allowUser]', r)
-      this.setState({status: AUTHORIZED, loading: false})
-    }).catch(this.onError)
-  }
+    let password = this.state.password
+    let status = this.state.status
+    let func = status === AUTHORIZED ? denyUser : allowUser
 
-  deny = (e) => {
-    e.preventDefault()
-    this.setState({loading: true})
-    this.checkAddress().then(denyUser).then(r => {
-      console.log('[denyUser]', r)
-      this.setState({status: DENY, loading: false})
+    this.props.onError('')
+    this.setState({loading: true, password: ''})
+    this.checkAddress().then(address => func(address, password)).then(r => {
+      this.setState({status: status === AUTHORIZED ? DENY : AUTHORIZED, loading: false})
     }).catch(this.onError)
   }
 
@@ -64,6 +60,13 @@ export default class Dashboard extends Component {
       error_address = 'La dirección es requerida'
     }
     this.setState({address, error_address})
+  }
+
+  onChange = (e) => {
+    let id = e.target.id
+    let value = e.target.value
+
+    this.setState({[id]: value})
   }
 
   render() {
@@ -87,6 +90,7 @@ export default class Dashboard extends Component {
             </div>
           </div>
         </div>
+        <RequirePassword onClick={this.submit} password={this.state.password} onChange={this.onChange}/>
       </div>
     );
   }
@@ -100,18 +104,42 @@ export default class Dashboard extends Component {
   }
 
   _renderButton = () => {
-    if (!this.state.registrar) return null
-    if (this.state.status === AUTHORIZED)
-      return <button className="btn btn-danger btn-block" onClick={this.deny}  disabled={this.state.loading}>
-        {this.state.loading ? <i className="fa fa-circle-notch fa-spin"></i> : 'Denegar'}
+    if (!this.state.registrar || this.state.status.length === 0) return null
+    let label = this.state.status === AUTHORIZED ? 'Denegar' : 'Autorizar'
+    let className = this.state.status === AUTHORIZED ? "btn btn-danger btn-block" : "btn btn-success btn-block"
+
+    return (
+      <button type="button" className={className} data-toggle="modal" data-target="#passwordModal" disabled={this.state.loading}>
+        {this.state.loading ? <i className="fa fa-circle-notch fa-spin"></i> : label}
       </button>
-    if (this.state.status === DENY)
-      return <button className="btn btn-success btn-block" onClick={this.authorize}  disabled={this.state.loading}>
-        {this.state.loading ? <i className="fa fa-circle-notch fa-spin"></i> : 'Autorizar'}
-      </button>
-    return null
+    )
   }
 }
+
+const RequirePassword = ({onClick, password, onChange}) => (
+  <div className="modal fade" id="passwordModal" tabIndex="-1" role="dialog">
+    <div className="modal-dialog" role="document">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">Requiere Contraseña</h5>
+          <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div className="modal-body">
+          <div className="form-group">
+            <label>Contraseña</label>
+            <input id="password" className="form-control" type="password" value={password} onChange={onChange} />
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={onClick}>Continuar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+)
 
 const MessageCard = ({message}) => (
   <div className="card mb-3">

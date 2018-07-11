@@ -9,7 +9,6 @@ let web3;
 let ks;
 
 function signTransaction(rawTx, cb) {
-  console.log('signing', rawTx)
   let tx = {
     nonce: rawTx.nonce,
     gasPrice: rawTx.gasPrice,
@@ -18,14 +17,11 @@ function signTransaction(rawTx, cb) {
     gasLimit: rawTx.gas,
     data: rawTx.data
   }
-  console.log(tx)
-  get_derived_key('asdf').then(pwDerivedKey => {
+  get_derived_key(rawTx.password).then(pwDerivedKey => {
     let contractTx = txutils.createContractTx(rawTx.from, tx)
-    console.log(contractTx)
     let signedTx = signing.signTx(ks, pwDerivedKey, contractTx.tx, rawTx.from)
-    console.log(signedTx)
     cb(null, '0x' + signedTx)
-  }).catch(e => cb(e))
+  }).catch(e => cb('La contraseña es incorrecta'))
 }
 
 export function initWeb3(keystore){
@@ -63,16 +59,16 @@ export function isAllowed(address) {
   return Promise.reject('Contrato no inicializado')
 }
 
-export function allowUser(address) {
+export function allowUser(address, password) {
   if (instanceContract !== null) {
-    return instanceContract.methods.allowUser(address).send()
+    return instanceContract.methods.allowUser(address).send({password})
   }
   return Promise.reject('Contrato no inicializado')
 }
 
-export function denyUser(address) {
+export function denyUser(address, password) {
   if (instanceContract !== null) {
-    return instanceContract.methods.denyUser(address).send()
+    return instanceContract.methods.denyUser(address).send({password})
   }
   return Promise.reject('Contrato no inicializado')
 }
@@ -132,7 +128,6 @@ export function from_wei(wei) {
 export function sendTransaction(password, tx) {
   return get_derived_key(password).then(pwDerivedKey => {
     tx.pwDerivedKey = pwDerivedKey
-    console.log('send', pwDerivedKey)
     return web3.eth.sendTransaction(tx)
   })
 }
