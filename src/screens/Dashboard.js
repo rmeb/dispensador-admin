@@ -97,9 +97,9 @@ export default class Dashboard extends Component {
 
   _renderMessage = (status) => {
     if (this.state.status === AUTHORIZED)
-      return <MessageCard message="El dispensador esta autorizado" />
+      return <MessageCard message="El expendedor esta autorizado" />
     if (this.state.status === DENY)
-      return <MessageCard message="El dispensador no esta autorizado" />
+      return <MessageCard message="El expendedor no esta autorizado" />
     return null
   }
 
